@@ -1,33 +1,47 @@
 # Python Substrate Interface
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/polkascan/py-substrate-interface/unittests.yml?branch=master)](https://github.com/JAMdotTech/py-polkadot-sdk/actions?query=workflow%3A%22Run+unit+tests%22)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/rotki/py-polkadot-sdk/unittests.yml?branch=master)](https://github.com/rotki/py-polkadot-sdk/actions?query=workflow%3A%22Run+unit+tests%22)
 [![Latest Version](https://img.shields.io/pypi/v/substrate-interface.svg)](https://pypi.org/project/substrate-interface/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/substrate-interface.svg)](https://pypi.org/project/substrate-interface/)
-[![License](https://img.shields.io/pypi/l/substrate-interface.svg)](https://github.com/JAMdotTech/py-polkadot-sdk/blob/master/LICENSE)
+[![License](https://img.shields.io/pypi/l/substrate-interface.svg)](https://github.com/rotki/py-polkadot-sdk/blob/master/LICENSE)
 
+> [!NOTE]
+> This repository is a [rotki](https://rotki.com/)-maintained fork of
+> [JAMdotTech/py-polkadot-sdk](https://github.com/JAMdotTech/py-polkadot-sdk).
+> It removes functionality and dependencies that are not used by rotki.
 
 ## Description
-This library specializes in interfacing with a [Substrate](https://substrate.io/) node; querying storage, composing extrinsics, 
-SCALE encoding/decoding and providing additional convenience methods to deal with the features and metadata of 
-the Substrate runtime.
+This rotki-focused build specializes in read-only access to a
+[Substrate](https://substrate.io/) node: querying storage, SCALE decoding and
+convenience methods for runtime metadata. It deliberately excludes seed,
+private-key, signing and embedded light-client support.
 
 ## Documentation
 
-* [Library documentation](https://jamdottech.github.io/py-polkadot-sdk/)
+* [Library repository and documentation](https://github.com/rotki/py-polkadot-sdk)
 * [Metadata documentation for Polkadot and Kusama ecosystem runtimes](https://jamdottech.github.io/py-polkadot-metadata-docs/)
 
 ## Installation
 ```bash
-pip install substrate-interface
+pip install git+https://github.com/rotki/py-polkadot-sdk.git
+```
+
+## Development
+
+Install the locked test and lint environments with [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv sync --locked --group lint --group test
+uv run pytest
+```
+
+Build the source and wheel distributions with:
+
+```bash
+uv build --no-sources
 ```
 
 ## Initialization
-
-Using embedded light client
-
-```python
-substrate = SubstrateInterface(chainspec="polkadot_asset_hub", relay_chainspecs=["polkadot"])
-```
 
 Using node RPC endpoint 
 ```python
@@ -45,29 +59,19 @@ older or runtimes under development the `ss58_format` (default 42) and other pro
 result = substrate.query('System', 'Account', ['F4xQKRUagnSGjFqafyhajLs94e7Vvzvr8ebwYJceKpr8R7T'])
 print(result.value['data']['free']) # 635278638077956496
 ```
-### Create balance transfer extrinsic
+### Convert a public key to an SS58 address
 
 ```python
-call = substrate.compose_call(
-    call_module='Balances',
-    call_function='transfer',
-    call_params={
-        'dest': '5E9oDs9PjpsBbxXxRE9uMaZZhnBAV38n2ouLB28oecBDdeQo',
-        'value': 1 * 10**12
-    }
+keypair = Keypair(
+    public_key='0xe4359ad3e2716c539a1d663ebd0a51bdc5c98a12e663bb4c4402db47828c9446',
+    ss58_format=0,
 )
-
-keypair = Keypair.create_from_uri('//Alice')
-extrinsic = substrate.create_signed_extrinsic(call=call, keypair=keypair)
-
-receipt = substrate.submit_extrinsic(extrinsic, wait_for_inclusion=True)
-
-print(f"Extrinsic '{receipt.extrinsic_hash}' sent and included in block '{receipt.block_hash}'")
+print(keypair.ss58_address)
 ```
 
 ## Contact and Support 
 
-For questions, please see the [Substrate StackExchange](https://substrate.stackexchange.com/questions/tagged/python) or [Github Discussions](https://github.com/JAMdotTech/py-polkadot-sdk/discussions).
+For questions, please see the [Substrate StackExchange](https://substrate.stackexchange.com/questions/tagged/python) or [GitHub Discussions](https://github.com/rotki/py-polkadot-sdk/discussions).
 
 ## License
-https://github.com/JAMdotTech/py-polkadot-sdk/blob/master/LICENSE
+https://github.com/rotki/py-polkadot-sdk/blob/master/LICENSE

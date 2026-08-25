@@ -15,9 +15,8 @@
 # limitations under the License.
 
 from .base import *
-from .contracts import *
 from .keypair import *
 from .interfaces import *
 from .extensions import *
 
-__all__ = (base.__all__ + contracts.__all__ + keypair.__all__ + interfaces.__all__ + extensions.__all__)
+__all__ = (base.__all__ + keypair.__all__ + interfaces.__all__ + extensions.__all__)

@@ -1,6 +1,12 @@
-This library specializes in interfacing with a [Substrate](https://substrate.io) node; querying storage, 
-composing extrinsics, [SCALE](getting-started/common-concepts/#scale) encoding/decoding and providing additional convenience methods 
-to deal with the features and metadata of the Substrate runtime.
+This repository is a [rotki](https://rotki.com/)-maintained fork of
+[JAMdotTech/py-polkadot-sdk](https://github.com/JAMdotTech/py-polkadot-sdk).
+It removes functionality and dependencies that are not used by rotki.
+
+This rotki-focused build specializes in read-only access to a
+[Substrate](https://substrate.io) node: querying storage,
+[SCALE](getting-started/common-concepts/#scale) decoding and convenience methods
+for runtime metadata. Seed, private-key, signing and embedded light-client
+support are deliberately excluded.
 
 ## Getting started
 About [installation, initialization](getting-started/installation/) and useful background information.
@@ -11,9 +17,6 @@ About [installation, initialization](getting-started/installation/) and useful b
 ## Function Reference
 [Extensive reference](reference/base/) of functions and classes in the library.
 
-## Examples
-[Various code snippets](examples.md) for common use-cases.
-
 ## Extensions
 Overview of available [extensions](/extensions/); adding or improving existing functionality.
 
@@ -22,8 +25,7 @@ Overview of available [extensions](/extensions/); adding or improving existing f
 
 ## Contact and Support 
 
-For questions, please see the [Substrate StackExchange](https://substrate.stackexchange.com/questions/tagged/python), [Github Discussions](https://github.com/polkascan/py-substrate-interface/discussions) or 
-reach out to us on our [matrix](http://matrix.org) chat group: [Polkascan Technical](https://matrix.to/#/#polkascan:matrix.org).
+For questions, please see the [Substrate StackExchange](https://substrate.stackexchange.com/questions/tagged/python) or [GitHub Discussions](https://github.com/rotki/py-polkadot-sdk/discussions).
 
 ## License
-[https://github.com/polkascan/py-substrate-interface/blob/master/LICENSE](https://github.com/polkascan/py-substrate-interface/blob/master/LICENSE)
+[https://github.com/rotki/py-polkadot-sdk/blob/master/LICENSE](https://github.com/rotki/py-polkadot-sdk/blob/master/LICENSE)

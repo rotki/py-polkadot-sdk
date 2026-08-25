@@ -17,7 +17,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from substrateinterface import SubstrateInterface, Keypair
+from substrateinterface import SubstrateInterface
 from substrateinterface.exceptions import StorageFunctionNotFound
 from test import settings
 
@@ -31,9 +31,6 @@ class RuntimeCallTestCase(unittest.TestCase):
             ss58_format=0,
             type_registry_preset='polkadot'
         )
-        # Create new keypair
-        mnemonic = Keypair.generate_mnemonic()
-        cls.keypair = Keypair.create_from_mnemonic(mnemonic)
 
     def test_core_version(self):
         result = self.substrate.runtime_call("Core", "version")
@@ -47,25 +44,6 @@ class RuntimeCallTestCase(unittest.TestCase):
 
         self.assertGreater(result.value['spec_version'], 0)
         self.assertEqual('polkadot', result.value['spec_name'])
-
-    def test_transaction_payment(self):
-        call = self.substrate.compose_call(
-            call_module='Balances',
-            call_function='transfer_keep_alive',
-            call_params={
-                'dest': 'EaG2CRhJWPb7qmdcJvy3LiWdh26Jreu9Dx6R1rXxPmYXoDk',
-                'value': 3 * 10 ** 3
-            }
-        )
-
-        extrinsic = self.substrate.create_signed_extrinsic(call=call, keypair=self.keypair, tip=1)
-        extrinsic_len = self.substrate.create_scale_object('u32')
-        extrinsic_len.encode(len(extrinsic.data))
-
-        result = self.substrate.runtime_call("TransactionPaymentApi", "query_fee_details", [extrinsic, extrinsic_len])
-
-        self.assertGreater(result.value['inclusion_fee']['base_fee'], 0)
-        self.assertEqual(0, result.value['tip'])
 
     def test_metadata_call_info(self):
 

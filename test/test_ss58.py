@@ -26,8 +26,10 @@ class SS58TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-
-        cls.alice_keypair = Keypair.create_from_uri('//Alice')
+        cls.alice_keypair = Keypair(
+            public_key='0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d',
+            ss58_format=42,
+        )
 
         cls.subkey_pairs = [
             {
