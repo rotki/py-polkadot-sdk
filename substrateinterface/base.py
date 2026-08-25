@@ -36,9 +36,9 @@ from .storage import StorageKey
 from .exceptions import SubstrateRequestException, ConfigurationError, StorageFunctionNotFound, BlockNotFound, \
     ExtrinsicNotFound, ExtensionCallNotFound
 from .constants import *
-from .keypair import Keypair, KeypairType, MnemonicLanguageCode
+from .keypair import Keypair
 from .utils.ss58 import ss58_decode, ss58_encode, is_valid_ss58_address, get_ss58_format
-from .transport import HttpTransport, WebsocketTransport, SmoldotTransport
+from .transport import HttpTransport, WebsocketTransport
 
 
 __all__ = ['SubstrateInterface', 'ExtrinsicReceipt', 'logger']
@@ -50,17 +50,13 @@ class SubstrateInterface:
 
     def __init__(self, url=None, websocket=None, ss58_format=None, type_registry=None, type_registry_preset=None,
                  cache_region=None, runtime_config=None, use_remote_preset=False, ws_options=None,
-                 auto_discover=True, auto_reconnect=True, config=None, chainspec=None,
-                 relay_chainspecs=None, relay_chain_ids=None):
+                 auto_discover=True, auto_reconnect=True, config=None):
         """
         A specialized class in interfacing with a Substrate node.
 
         Parameters
         ----------
         url: the URL to the substrate node, either in format https://127.0.0.1:9933 or wss://127.0.0.1:9944
-        chainspec: path or preset name string for a Substrate chain spec (Smoldot light client)
-        relay_chainspecs: list of relay chain specs (paths or preset names) for Smoldot parachain usage
-        relay_chain_ids: list of relay chain IDs for Smoldot parachain usage
         ss58_format: The address type which account IDs will be SS58-encoded to Substrate addresses. Defaults to 42, for Kusama the address type is 2
         type_registry: A dict containing the custom type registry in format: {'types': {'customType': 'u32'},..}
         type_registry_preset: The name of the predefined type registry shipped with the SCALE-codec, e.g. kusama
@@ -70,14 +66,8 @@ class SubstrateInterface:
         config: dict of config flags to overwrite default configuration
         """
 
-        if chainspec and (url or websocket):
-            raise ValueError("Either 'chainspec' or 'url'/'websocket' must be provided")
-        if not chainspec and ((not url and not websocket) or (url and websocket)):
+        if (not url and not websocket) or (url and websocket):
             raise ValueError("Either 'url' or 'websocket' must be provided")
-        if chainspec is None and (relay_chainspecs or relay_chain_ids):
-            raise ValueError("'relay_chainspecs' and 'relay_chain_ids' are only valid with 'chainspec'")
-        if relay_chainspecs and relay_chain_ids:
-            raise ValueError("Specify either 'relay_chainspecs' or 'relay_chain_ids', not both")
 
         # Initialize lazy loading variables
         self.__version = None
@@ -104,9 +94,6 @@ class SubstrateInterface:
 
         self.request_id = 1
         self.url = url
-        self.chainspec = chainspec
-        self.relay_chainspecs = relay_chainspecs
-        self.relay_chain_ids = relay_chain_ids
         self.websocket = None
         self.transport = None
 
@@ -149,14 +136,7 @@ class SubstrateInterface:
         if type(config) is dict:
             self.config.update(config)
 
-        if self.chainspec:
-            self.transport = SmoldotTransport(
-                chainspec=self.chainspec,
-                relay_chainspecs=self.relay_chainspecs,
-                relay_chain_ids=self.relay_chain_ids,
-                debug_fn=self.debug_message
-            )
-        elif websocket or (self.url and (self.url[0:6] == 'wss://' or self.url[0:5] == 'ws://')):
+        if websocket or (self.url and (self.url[0:6] == 'wss://' or self.url[0:5] == 'ws://')):
             self.transport = WebsocketTransport(
                 url=self.url,
                 websocket=websocket,

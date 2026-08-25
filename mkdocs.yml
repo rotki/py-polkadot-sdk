@@ -1,11 +1,11 @@
 site_name: Python Substrate Interface Docs
-repo_url: https://github.com/jamdottech/py-polkadot-sdk
+repo_url: https://github.com/rotki/py-polkadot-sdk
 edit_uri: edit/master/docs/
 site_description: Python library to interface with the Polkadot ecosystem
 
 theme:
   name: "material"
-  logo: https://avatars.githubusercontent.com/u/43450475
+  logo: https://github.com/rotki.png
   features:
     # - announce.dismiss
     - content.action.edit
@@ -50,9 +50,7 @@ plugins:
 extra:
   social:
   - icon: fontawesome/brands/github
-    link: https://github.com/JAMdotTech
-  - icon: fontawesome/brands/twitter
-    link: https://twitter.com/JAMdotTech
+    link: https://github.com/rotki
 
 nav:
   - Overview: index.md
@@ -63,20 +61,15 @@ nav:
     - usage/query-storage.md
     - usage/using-scaletype-objects.md
     - usage/subscriptions.md
-    - usage/keypair-creation-and-signing.md
-    - usage/extrinsics.md
     - usage/call-runtime-apis.md
-    - usage/ink-contract-interfacing.md
     - usage/extensions.md
     - usage/cleanup-and-context-manager.md
   - Function Reference:
     - reference/base.md
     - reference/keypair.md
-    - reference/contracts.md
     - reference/interfaces.md
     - reference/extensions.md
     - reference/storage.md
-  - Examples: examples.md
   - Extensions:
       - extensions/index.md
       - extensions/substrate-node-extension.md
@@ -94,4 +87,3 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
-
